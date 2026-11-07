@@ -11,8 +11,8 @@ const message = ref('')
     <div class="panel">
       <InstallationGuide
         :product="hopeya"
-        @see-compact="message = 'Démo : redirection vers les modèles plus compacts.'"
-        @see-delivery="message = 'Démo : redirection vers les options de livraison.'"
+        @see-compact="message = 'Découvrez les modèles plus compacts sur Vente-unique.'"
+        
       />
       <p class="demo-status" role="status">{{ message }}</p>
     </div>
@@ -21,6 +21,6 @@ const message = ref('')
 
 <style scoped>
 .page { min-height: 100vh; padding: 24px 16px; display: flex; justify-content: center; align-items: flex-start; }
-.panel { width: 100%; max-width: 440px; }
+.panel { width: 100%; max-width: 500px; }
 .demo-status { margin-top: 12px; font-size: 12px; color: var(--c-muted); min-height: 18px; }
 </style>

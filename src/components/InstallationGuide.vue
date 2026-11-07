@@ -12,7 +12,7 @@ const guide = computed(() => props.product.installationGuide)
 const uid = useId()
 const panelId = `${uid}-panel`
 
-const open = ref(false) // replié par défaut
+const open = ref(true)
 const active = ref('delivery')
 const tabs = [
   { id: 'delivery', label: 'Livraison', icon: Truck },
@@ -54,7 +54,7 @@ function onKeydown(e) {
     </h2>
 
     <!-- v-show : l'état des onglets (mesures saisies) est conservé -->
-    <div v-show="open" :id="panelId" class="body" role="region" :aria-label="guide.title">
+    <div v-show="open" :id="panelId" class="body" :class="{ 'is-assembly': active === 'assembly', 'is-space': active === 'space' }" role="region" :aria-label="guide.title">
       <div class="tabs" role="tablist" aria-label="Informations d'installation" @keydown="onKeydown">
         <button
           v-for="t in tabs" :key="t.id" :id="tabId(t.id)"
@@ -66,7 +66,7 @@ function onKeydown(e) {
           :tabindex="active === t.id ? 0 : -1"
           @click="select(t.id)"
         >
-          <component :is="t.icon" :size="18" :stroke-width="1.75" aria-hidden="true" />
+          <component :is="t.icon" :size="18" :stroke-width="8 / 3" aria-hidden="true" />
           <span>{{ t.label }}</span>
         </button>
       </div>
@@ -80,7 +80,7 @@ function onKeydown(e) {
         <SpaceCheck :space="guide.space" @see-compact="emit('see-compact')" />
       </div>
       <div v-show="active === 'assembly'" :id="tabPanelId('assembly')" role="tabpanel" :aria-labelledby="tabId('assembly')" tabindex="0">
-        <AssemblyInfo :assembly="guide.assembly" @see-delivery="emit('see-delivery')" />
+        <AssemblyInfo :assembly="guide.assembly" @see-delivery="select('delivery')" />
       </div>
     </div>
   </section>
@@ -88,21 +88,23 @@ function onKeydown(e) {
 
 <style scoped>
 .guide { background: #fff; border: 1px solid var(--c-border); border-radius: var(--r-card); }
-.guide:hover { border-color: var(--c-border-strong); }
+.guide:has(.header:hover) { border-color: var(--c-border-strong); }
 .heading { font-size: inherit; font-weight: inherit; }
-.header { display: flex; align-items: flex-start; gap: 16px; width: 100%; padding: 18px 20px; text-align: left; background: none; border: 0; border-radius: var(--r-card); cursor: pointer; }
+.header { display: flex; align-items: flex-start; gap: 20px; width: 100%; padding: 20px; text-align: left; background: none; border: 0; border-radius: var(--r-card); cursor: pointer; }
 .lead { flex: none; margin-top: 1px; }
 .texts { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .h-title { font-size: 14px; font-weight: 500; }
 .h-sub { font-size: 12px; color: var(--c-muted); }
 .chev { flex: none; margin-top: 1px; }
-.body { padding: 0 20px 20px; }
+.body { padding: 21px 8px 12px; }
+/* Add 12px below Montage and Mon espace, as requested. */
+.body.is-assembly, .body.is-space { padding-bottom: 24px; }
 .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.tab { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 14px 12px; font-size: 13px; background: #fff; border: 1px solid var(--c-border); border-radius: var(--r-tile); cursor: pointer; text-align: left; }
+.tab { height: 84px; color: rgba(23, 13, 14, 0.8); line-height: 20px; font-weight: 500; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 16px; font-size: 14px; background: #fff; border: 1px solid rgba(86, 67, 69, 0.501961); border-radius: var(--r-tile); cursor: pointer; text-align: left; }
 .tab:hover { border-color: #6f6f6f; }
 /* L'état sélectionné est défini après :hover et reste identique au survol */
-.tab.is-selected, .tab.is-selected:hover { background: var(--c-surface); border-color: var(--c-border-strong); box-shadow: 0 0 0 .5px var(--c-border-strong); }
-.divider { border: 0; border-top: 1px solid var(--c-divider); margin: 18px 0 20px; }
+.tab.is-selected, .tab.is-selected:hover { background: #f8f8f8; border-color: rgba(23, 13, 14, 0.8); color: #130c0c; box-shadow: none; }
+.divider { border: 0; border-top: 1px solid var(--c-divider); margin: 24px 0 25px; }
 [role='tabpanel']:focus-visible { outline-offset: 6px; border-radius: 8px; }
-@media (max-width: 380px) { .header { padding: 16px; } .body { padding: 0 16px 16px; } .tab { padding: 12px 8px; font-size: 12px; } }
+@media (max-width: 380px) { .header { padding: 16px; gap: 12px; } .tab { padding: 14px 10px; font-size: 13px; } }
 </style>

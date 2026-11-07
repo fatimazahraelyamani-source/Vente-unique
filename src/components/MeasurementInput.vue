@@ -1,6 +1,5 @@
 <script setup>
 import { computed, ref, useId } from 'vue'
-import { CircleAlert } from 'lucide-vue-next'
 import { parseMeasure } from '../utils/measure'
 
 const props = defineProps({
@@ -41,6 +40,7 @@ const describedBy = computed(() => [hintId, message.value ? errorId : ''].filter
 <template>
   <div class="field">
     <label class="label" :for="inputId">{{ label }}</label>
+    <div class="control" :class="{ 'is-focused': focused, 'is-error': !!message }">
     <input
       :id="inputId"
       class="input"
@@ -57,9 +57,13 @@ const describedBy = computed(() => [hintId, message.value ? errorId : ''].filter
       @focus="onFocus"
       @blur="onBlur"
     />
+    </div>
     <span :id="hintId" class="sr-only">Valeur en {{ unit }}</span>
     <p v-if="message" :id="errorId" class="error">
-      <CircleAlert :size="14" :stroke-width="2.25" aria-hidden="true" />
+      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+        <circle cx="10" cy="10" r="6.25" fill="#e5002d" />
+        <path d="M10 7.5V10M10 12.5h.0062" stroke="white" stroke-width="1" stroke-linecap="round" />
+      </svg>
       <span>{{ message }}</span>
     </p>
   </div>
@@ -67,21 +71,24 @@ const describedBy = computed(() => [hintId, message.value ? errorId : ''].filter
 
 <style scoped>
 .field { display: flex; flex-direction: column; min-width: 0; }
-.label { font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+.label { font-size: 14px; line-height: 22px; font-weight: 600; margin-bottom: 12px; color: #000; }
+.control { position: relative; border-radius: 15px; }
+/* Figma: a 226 × 49 field, a 236 × 59 focus ring, and a 3px clear gap. */
+.control::after { content: ''; position: absolute; inset: -5px; border: 2px solid transparent; border-radius: 18px; pointer-events: none; }
+.control.is-focused::after { border-color: rgba(86, 67, 69, 0.501961); }
+.control.is-error.is-focused::after { border-color: #ffccd6; }
 .input {
-  width: 100%; height: 44px; padding: 0 14px;
-  font: inherit; font-size: 14px; color: var(--c-text);
-  background: var(--c-surface);
-  border: 1px solid #8c8c8c; border-radius: var(--r-input);
-  outline: none;
-  transition: box-shadow .12s, border-color .12s;
+  display: block; appearance: none; width: 100%; height: 49px; padding: 0 12px;
+  font-family: inherit; font-size: 14px; line-height: 22px; font-weight: 400; color: var(--c-text);
+  background: rgba(197, 185, 187, 0.141176);
+  border: 1px solid #757575; border-radius: 15px;
+  outline: none; box-shadow: none;
 }
-.input::placeholder { color: #7a7a7a; }
+.input::placeholder { color: #6c757d; opacity: 1; }
+.input:focus-visible { outline: none; }
 .input:disabled { opacity: .5; cursor: not-allowed; }
-/* Focus piloté par l'état réel focus/blur */
-.input.is-focused { border-color: #555; box-shadow: 0 0 0 3px var(--c-focus-ring); }
-.input.is-error { border-color: var(--c-error); background: #fbf3f3; }
-.input.is-error.is-focused { border-color: var(--c-error); box-shadow: 0 0 0 3px var(--c-error-ring); }
-.error { display: flex; align-items: center; gap: 4px; margin-top: 8px; font-size: 11.5px; color: var(--c-error); }
+.input.is-error { border-color: #ec221f; }
+.error { display: flex; align-items: flex-start; align-self: center; width: max-content; max-width: calc(100% + 9.05px); gap: 0; margin-top: 13px; font-size: 12px; line-height: 20px; font-weight: 400; color: #ec221f; }
+.control.is-focused + .sr-only + .error { margin-top: 15px; }
 .error svg { flex: none; }
 </style>

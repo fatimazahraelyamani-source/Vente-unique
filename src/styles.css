@@ -1,20 +1,23 @@
+@font-face { font-family: Poppins; font-style: normal; font-weight: 400; font-display: swap; src: url(/assets/Poppins-Regular.ttf) format("truetype"); }
+@font-face { font-family: Poppins; font-style: normal; font-weight: 500; font-display: swap; src: url(/assets/Poppins-Medium.ttf) format("truetype"); }
+@font-face { font-family: Poppins; font-style: normal; font-weight: 600; font-display: swap; src: url(/assets/Poppins-SemiBold.ttf) format("truetype"); }
 :root {
   --font: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --c-text: #1a1a1a;
-  --c-muted: #6b6b6b;
-  --c-border: #c9c9c9;
-  --c-border-strong: #2b2b2b;
+  --c-text: #1f1415;
+  --c-muted: #7a7575;
+  --c-border: #c5b9bb;
+  --c-border-strong: #7a7575;
   --c-divider: #ececec;
-  --c-surface: #f4f2f2;
+  --c-surface: #f7f5f5;
   --c-page: #f8f8f8;
-  --c-success: #0a9d4f;
-  --c-warning: #c2570a;
-  --c-error: #e5160f;
+  --c-success: #00b85b;
+  --c-warning: #df9500;
+  --c-error: #ec221f;
   --c-error-ring: rgba(229, 22, 15, 0.22);
   --c-focus-ring: rgba(26, 26, 26, 0.2);
-  --r-card: 16px;
-  --r-tile: 14px;
-  --r-input: 12px;
+  --r-card: 20px;
+  --r-tile: 20px;
+  --r-input: 16px;
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
